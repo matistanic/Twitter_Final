@@ -1,0 +1,59 @@
+<div class = "container d-flex justify-content-center">
+  <div class="col-md-3 offset-md-2">
+      <%= search_form_for @q do |f| %>
+          <div class="d-flex justify-content-center"><%= f.label :Tweets %></div>
+          <div class="form-group d-flex justify-content-center">
+              
+              <%= f.search_field :content_cont, class: "formcontrol", placeholder: "Search here" %>
+              <%= f.submit "Search", class: "btn btn-primary" %>
+          </div>
+  </div>  
+          
+</div>
+
+<% end %>
+
+
+<p id="notice"><%= notice %></p>
+
+<h1>Tweets</h1>
+<% if current_user %>
+<%= render 'form', tweet: @tweet %>
+<% end %>
+
+    <% @tweets.each do |tweet| %>
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <%= image_tag(tweet.user.avatar_url, width: "40%")%> dice:
+          </div>
+          <div class="col md-8">
+            <div class="card-body">
+              <% if tweet.origin_tweet.nil?%>
+                <p class="card-text"> <%= tweet.content %> </p>
+              <% else %>
+                <%= image_tag(tweet.original_tweet.user.avatar_url, width: "40%")%> <%= tweet.original_tweet.user.name %> dice:
+                <div class="container mx-auto">
+                  <%= tweet.content %>
+                </div>
+              <% end %>
+              <%= link_to 'like', tweet_like_path(tweet), method: :post%> <%= tweet.likes.count %>
+              <%= link_to 'retweet', tweet_retweet_path(tweet), method: :post%>
+            </div>
+          </div>
+        </div>
+      </div>
+<% end %>
+
+
+
+
+
+<br>
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <%= link_to_next_page @tweets, 'Mostrar más tweets' %>
+  </div>
+</div>
+
+<%= link_to 'New Tweet', new_tweet_path %>
